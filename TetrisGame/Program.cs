@@ -56,10 +56,11 @@ namespace Tetris
         static int Score = 0;
         static int Frame = 0;
         static int FramesToMoveFigure = 15;
-        static int CurrentFigureIndex = random.Next(0, TetrisFigures.Count); 
         static int CurrentFigureRow = 0;
         static int CurrentFigureCol = 0;
         static bool[,] TetrisField = new bool[TetrisRows, TetrisCols];
+        static int CurrentFigureIndex = random.Next(0, TetrisFigures.Count);
+        static bool[,] currentFigure = TetrisFigures[CurrentFigureIndex];
 
         static void Main(string[] args)
         {
@@ -84,20 +85,23 @@ namespace Tetris
                     }
                     if (key.Key == ConsoleKey.LeftArrow || key.Key == ConsoleKey.A)
                     {
-                        // TODO: Move current figure left
-                        CurrentFigureCol--; // TODO: Out of range
+                        if (CurrentFigureCol > 0) // added limitations for moving left
+                        {
+                            CurrentFigureCol--; 
+                        }
                     }
                     if (key.Key == ConsoleKey.RightArrow || key.Key == ConsoleKey.D)
                     {
-                        // TODO: Move current figure right
-                        CurrentFigureCol++; // TODO: Out of range
+                        if (CurrentFigureCol < TetrisCols - currentFigure.GetLength(1))
+                        {
+                            CurrentFigureCol++; // added limitations for moving right
+                        }
                     }
                     if (key.Key == ConsoleKey.DownArrow || key.Key == ConsoleKey.S)
                     {
                         Frame = 1;
                         Score++;
-                        CurrentFigureRow++;
-                        // TODO: Move current figure down
+                        CurrentFigureRow++; //TODO: add limit for moving down corresponding to last free line on the screen
                     }
                     if (key.Key == ConsoleKey.Spacebar || key.Key == ConsoleKey.UpArrow || key.Key == ConsoleKey.W)
                     {
@@ -171,7 +175,7 @@ namespace Tetris
 
         static void DrawCurrentFigure()
         {
-            var currentFigure = TetrisFigures[CurrentFigureIndex];
+            
             for (int row = 0; row < currentFigure.GetLength(0); row++)
             {
                 for (int col = 0; col < currentFigure.GetLength(1); col++)
