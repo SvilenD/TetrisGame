@@ -101,7 +101,10 @@ namespace Tetris
                     {
                         Frame = 1;
                         Score++;
-                        CurrentFigureRow++; //TODO: add limit for moving down corresponding to last free line on the screen
+                        if (CurrentFigureRow < TetrisRows - currentFigure.GetLength(0))
+                        {
+                            CurrentFigureRow++; //TODO: change limits for moving down corresponding to last free line on the field
+                        }
                     }
                     if (key.Key == ConsoleKey.Spacebar || key.Key == ConsoleKey.UpArrow || key.Key == ConsoleKey.W)
                     {
@@ -112,7 +115,18 @@ namespace Tetris
                 // Update the game state
                 if (Frame % FramesToMoveFigure == 0)
                 {
-                    CurrentFigureRow++;
+                    if (CurrentFigureRow < TetrisRows - currentFigure.GetLength(0))
+                    {
+                        CurrentFigureRow++; //TODO: change limits for moving down corresponding to last free line on the field
+                                                    //TODO: keep the figure on the field.
+                    }
+                    else
+                    {
+                        CurrentFigureRow = 0;
+                        CurrentFigureCol = 0;
+                        DrawCurrentFigure();
+                    }
+                    
                     Frame = 0;
                 }
                 // // TODO: if (Collision())
