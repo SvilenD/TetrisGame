@@ -13,7 +13,7 @@
 
         public static int FramesToMoveFigure(int level)
         {
-            return 15 - level;
+            return 21 - level;
         }
     }
 }
