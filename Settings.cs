@@ -46,5 +46,8 @@
                     { true, true, true }
                 },
             };
+        internal static readonly int SleepTime = 40;
+        internal static readonly string HighScoresFilePath = "../../../HighScores.txt";
+        internal static readonly string GameTitle = "Tetris v1.0";
     }
 }

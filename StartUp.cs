@@ -1,29 +1,25 @@
 ﻿namespace TetrisGame
 {
     using System;
-    using System.Threading;
 
     internal class StartUp
     {
-        internal static int CurrentFigureRow = 0;
-        internal static int CurrentFigureCol = 0;
-        internal static int Frame = 0;
-        internal static int Score = 0;
-        internal static bool[,] TetrisField = new bool[Settings.TetrisRows, Settings.TetrisCols]; //keeps all figures that are already in the game
-        internal static int Level;
-        internal static readonly Random random = new Random();
-        internal static bool[,] CurrentFigure = Settings.TetrisFigures[random.Next(0, Settings.TetrisFigures.Count)];
-        static int FramesToMoveFigure;  // changes game speed
-        static bool SuppressKeyPress;
+        private static readonly Random random = new Random();
+        private static int CurrentFigureRow = 0;
+        private static int CurrentFigureCol = 0;
+        private static int Frame = 0;
+        private static int FramesToMoveFigure;  //changes game speed
+        private static bool[,] TetrisField = new bool[Settings.TetrisRows, Settings.TetrisCols]; //keeps all figures that are already in the game
+        private static string UserName;
+        private static bool SuppressKeyPress;
+        private static int Score = 0;
+        private static int Level = 1;
+        private static bool[,] CurrentFigure = Settings.TetrisFigures[random.Next(0, Settings.TetrisFigures.Count)];
 
         static void Main()
         {
-            Console.Title = "Tetris v1.0";
-            Console.CursorVisible = false;
-            Console.WindowHeight = Settings.ConsoleRows + 1;
-            Console.WindowWidth = Settings.ConsoleCols;
-            Console.BufferHeight = Settings.ConsoleRows + 1;
-            Console.BufferWidth = Settings.ConsoleCols;
+            GetUserName();
+            new ConsoleSetup();
 
             while (true)
             {
@@ -39,14 +35,7 @@
                     //pause game
                     if (key.Key == ConsoleKey.Escape)
                     {
-                        Writer.Write("Game Paused", 2, Settings.TetrisCols / 3, ConsoleColor.White);
-                        Writer.Write("Press Esc to continue", 3, 1, ConsoleColor.White);
-                        key = Console.ReadKey();
-                        while (key.Key != ConsoleKey.Escape)
-                        {
-                            Thread.Sleep(10000000);
-                            key = Console.ReadKey();
-                        }
+                        GameModes.Pause();
                     }
 
                     //move left
@@ -91,9 +80,9 @@
 
                 //Redraw UI
                 Writer.DrawBorder();
-                Writer.DrawInfo();
-                Writer.DrawTetrisField();
-                Writer.DrawCurrentFigure();
+                Writer.DrawInfo(Score, Level);
+                Writer.DrawTetrisField(TetrisField);
+                Writer.DrawCurrentFigure(CurrentFigure, CurrentFigureRow, CurrentFigureCol);
 
                 if (Collision())
                 {
@@ -105,12 +94,19 @@
                     CurrentFigureCol = 0;
                     if (Collision())
                     {
-                        GameStates.GameOver();
+                        GameModes.GameOver(Score, UserName);
                     }
                 }
-                Thread.Sleep(40);
+
                 SuppressKeyPress = Frame % 5 == 0;
+                GameModes.Sleep();
             }
+        }
+
+        private static void GetUserName()
+        {
+            Writer.Write("Please enter your Name: ", 3, 5, ConsoleColor.White);
+            UserName = Console.ReadLine();
         }
 
         private static void CheckForFullLines()
