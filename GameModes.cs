@@ -7,12 +7,13 @@
     {
         internal static void GameOver(int score, string userName)
         {
-            Writer.Write("Game Over!", 2, Settings.TetrisCols / 3, ConsoleColor.White);
-            Writer.Write($"Score: {score.ToString()}", 3, Settings.TetrisCols / 3, ConsoleColor.Red);
-            Writer.Write("Press Space to Exit", 5, 1, ConsoleColor.White);
-            var key = Console.ReadKey();
+            Writer.Write(ConstantMsgs.GameOver, 2, Settings.TetrisCols / 3, ConsoleColor.White);
+            Writer.Write(String.Format(ConstantMsgs.FinalScore, score), 3, Settings.TetrisCols / 3, ConsoleColor.Red);
+            Writer.Write(ConstantMsgs.HighScoresTitle, 5, 3, ConsoleColor.White);
             var highScore = new HighScore();
             highScore.Record(score, userName);
+            Writer.Write(ConstantMsgs.Exit, 13, 1, ConsoleColor.White);
+            var key = Console.ReadKey();
 
             while (key.Key != ConsoleKey.Spacebar)
             {
@@ -23,8 +24,7 @@
 
         internal static void Pause()
         {
-            Writer.Write("Game Paused", 2, Settings.TetrisCols / 3, ConsoleColor.White);
-            Writer.Write("Press Esc to continue", 3, 1, ConsoleColor.White);
+            Writer.Write(ConstantMsgs.GamePaused, 2, Settings.TetrisCols / 3, ConsoleColor.White);
             var key = Console.ReadKey();
             while (key.Key != ConsoleKey.Escape)
             {

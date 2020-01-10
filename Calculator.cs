@@ -4,16 +4,14 @@
 
     public static class Calculator
     {
-        static readonly int ChangeLevel = 1000;
-
         public static int GetLevel(int score)
         {
-            return Math.Min(15, 1 + (score / ChangeLevel));
+            return Math.Min(Settings.MaxLevel, 1 + (score / Settings.ChangeLevelPoints));
         }
 
         public static int FramesToMoveFigure(int level)
         {
-            return 21 - level;
+            return Settings.MaxFrames - level;
         }
     }
 }

@@ -11,7 +11,7 @@
 
         private void Setup()
         {
-            Console.Title = Settings.GameTitle;
+            Console.Title = ConstantMsgs.GameTitle;
             Console.CursorVisible = false;
             Console.WindowHeight = Settings.ConsoleRows + 1;
             Console.WindowWidth = Settings.ConsoleCols;

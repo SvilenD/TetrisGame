@@ -9,18 +9,34 @@
         internal static readonly int InfoCols = 10;
         internal static readonly int ConsoleRows = 1 + TetrisRows + 1;
         internal static readonly int ConsoleCols = 1 + TetrisCols + 1 + InfoCols + 1;
+        internal static readonly int MaxLevel = 10;
+        internal static readonly int ChangeLevelPoints = 5000;
+        internal static readonly int[] ScorePerLines = { 0, 20, 50, 150, 300 };
+        internal static readonly int MaxFrames = 20;
         internal static readonly List<bool[,]> TetrisFigures = new List<bool[,]>()
             {
-                new bool[,] // ----
-                {
-                    { true, true, true, true }
-                },
-                new bool[,] // O
+                new bool[,] // square
                 {
                     { true, true },
                     { true, true }
                 },
+                new bool[,] // ----
+                {
+                    { true, true, true, true }
+                },
+                new bool[,] // |
+                {
+                    {true},
+                    {true},
+                    {true},
+                    {true}
+                },
                 new bool[,] // T
+                {
+                  { true, true, true },
+                  { false, true, false },
+                },
+                new bool[,] // _|_
                 {
                   { false, true, false },
                   { true, true, true },
@@ -46,8 +62,7 @@
                     { true, true, true }
                 },
             };
-        internal static readonly int SleepTime = 40;
+        internal static readonly int SleepTime = 30;
         internal static readonly string HighScoresFilePath = "../../../HighScores.txt";
-        internal static readonly string GameTitle = "Tetris v1.0";
     }
 }

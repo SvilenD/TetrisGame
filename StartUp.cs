@@ -18,7 +18,7 @@
 
         static void Main()
         {
-            GetUserName();
+            //GetUserName();
             new ConsoleSetup();
 
             while (true)
@@ -41,17 +41,39 @@
                     //move left
                     if (key.Key == ConsoleKey.LeftArrow || key.Key == ConsoleKey.A)
                     {
-                        if (CurrentFigureCol >= 1 && !TetrisField[CurrentFigureRow, CurrentFigureCol - 1])
+                        if (CurrentFigureCol >= 1)
                         {
-                            CurrentFigureCol--;
+                            for (int i = 0; i < CurrentFigure.GetLength(0); i++)
+                            {
+                                if (TetrisField[CurrentFigureRow + i, CurrentFigureCol - 1])
+                                {
+                                    SuppressKeyPress = true;
+                                    break;
+                                }
+                            }
+                            if (SuppressKeyPress == false)
+                            {
+                                CurrentFigureCol--;
+                            }
                         }
                     }
                     //move right
                     if (key.Key == ConsoleKey.RightArrow || key.Key == ConsoleKey.D)
                     {
-                        if (CurrentFigureCol < Settings.TetrisCols - CurrentFigure.GetLength(1) && !TetrisField[CurrentFigureRow, CurrentFigureCol + 1])
+                        if (CurrentFigureCol < Settings.TetrisCols - CurrentFigure.GetLength(1))
                         {
-                            CurrentFigureCol++;
+                            for (int i = 0; i < CurrentFigure.GetLength(0); i++)
+                            {
+                                if (TetrisField[CurrentFigureRow + i, CurrentFigureCol + 1])
+                                {
+                                    SuppressKeyPress = true;
+                                    break;
+                                }
+                            }
+                            if (SuppressKeyPress == false)
+                            {
+                                CurrentFigureCol++;
+                            }
                         }
                     }
                     //move down
@@ -67,7 +89,11 @@
                     }
                     if (key.Key == ConsoleKey.Spacebar || key.Key == ConsoleKey.UpArrow || key.Key == ConsoleKey.W)
                     {
-                        // TODO: Implement 90-degree rotation of the current figure
+                        if (CurrentFigure != Settings.TetrisFigures[0]) // != square figure
+                        {
+                            RotateCurrentFigure();
+
+                        }
                     }
                 }
 
@@ -87,8 +113,8 @@
                 if (Collision())
                 {
                     AddCurrentFigureToTetrisField();
-                    //CheckForFullLines();
-
+                    int lines = CheckForFullLines();
+                    Score += Settings.ScorePerLines[lines];
                     CurrentFigure = Settings.TetrisFigures[random.Next(0, Settings.TetrisFigures.Count)];
                     CurrentFigureRow = 0;
                     CurrentFigureCol = 0;
@@ -98,20 +124,56 @@
                     }
                 }
 
-                SuppressKeyPress = Frame % 5 == 0;
+                if (Frame % 2 == 1)
+                {
+                    SuppressKeyPress = false;
+                }
                 GameModes.Sleep();
             }
         }
 
+        private static void RotateCurrentFigure()
+        {
+            var newFigure = new bool[CurrentFigure.GetLength(1),CurrentFigure.GetLength(0)];
+            CurrentFigure = newFigure;
+        }
+
         private static void GetUserName()
         {
-            Writer.Write("Please enter your Name: ", 3, 5, ConsoleColor.White);
+            Writer.Write(ConstantMsgs.EnterName, 3, 5, ConsoleColor.White);
             UserName = Console.ReadLine();
         }
 
-        private static void CheckForFullLines()
+        private static int CheckForFullLines() // 0, 1, 2, 3, 4
         {
-            throw new NotImplementedException();
+            int lines = 0;
+
+            for (int row = 0; row < TetrisField.GetLength(0); row++)
+            {
+                bool rowIsFull = true;
+                for (int col = 0; col < TetrisField.GetLength(1); col++)
+                {
+                    if (TetrisField[row, col] == false)
+                    {
+                        rowIsFull = false;
+                        break;
+                    }
+                }
+                if (rowIsFull)
+                {
+                    lines++;
+
+                    for (int rowToMove = row; rowToMove > 0; rowToMove--)
+                    {
+                        for (int col = 0; col < TetrisField.GetLength(1); col++)
+                        {
+                            TetrisField[rowToMove, col] = TetrisField[rowToMove - 1, col];
+                        }
+                    }
+                }
+            }
+
+            return lines;
         }
 
         private static void AddCurrentFigureToTetrisField()
