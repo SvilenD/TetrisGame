@@ -9,28 +9,32 @@
     internal class HighScore
     {
         private const string MatchPattern = @"^(.+) -> (.+) - (?<score>\d+).$";
+        private readonly string userName;
         private Dictionary<string, int> topScores;
         private int topScoresWriteRow = 7;
 
-        public HighScore()
+        public int Score { get; set; }
+
+        public HighScore(string userName)
         {
+            this.userName = userName;
             this.topScores = new Dictionary<string, int>();
         }
 
-        internal void Record(int score, string userName)
+        internal void Record()
         {
             if (File.Exists(Settings.HighScoresFilePath) == false)
             {
                 File.AppendAllText(Settings.HighScoresFilePath, ConstantMsgs.HighScoresTitle + Environment.NewLine + Environment.NewLine);
             }
 
-            var text = $"{DateTime.Now.ToString(ConstantMsgs.DateTimeFormat)}{ConstantMsgs.DateUserSeparator}{userName} - {score}.";
+            var text = $"{DateTime.Now.ToString(ConstantMsgs.DateTimeFormat)}{ConstantMsgs.DateUserSeparator}{this.userName} - {this.Score}.";
             File.AppendAllText(Settings.HighScoresFilePath, text + Environment.NewLine);
 
             GetTopScores();
         }
 
-        internal void GetTopScores()
+        private void GetTopScores()
         {
             var allScores = File.ReadAllLines(Settings.HighScoresFilePath);
             foreach (var score in allScores)
@@ -52,8 +56,8 @@
             foreach (var kvp in topScores)
             {
                 var start = ConstantMsgs.DateTimeFormat.Length + ConstantMsgs.DateUserSeparator.Length;
-                var userName = kvp.Key.Substring(start, kvp.Key.Length - (start + 1));
-                Writer.Write($"{userName} - {kvp.Value}", topScoresWriteRow++, 3, ConsoleColor.White);
+                var name = kvp.Key.Substring(start, kvp.Key.Length - (start + 1));
+                Writer.Write($"{name} - {kvp.Value}", topScoresWriteRow++, 3, ConsoleColor.White);
             }
         }
     }

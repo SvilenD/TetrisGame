@@ -3,7 +3,7 @@
     internal static class ConstantMsgs
     {
         internal const string GameTitle = "Tetris v1.0";
-        internal const string EnterName = "Please enter your Name: ";
+        internal const string EnterName = "Enter your Name: ";
         internal const string HighScoresTitle = "Tetris Score Board:";
         internal const string DateTimeFormat = "dd/MM/yy - hh:mm:ss";
         internal const string DateUserSeparator = " -> ";
