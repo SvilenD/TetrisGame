@@ -7,6 +7,7 @@
     {
         internal static void GameOver(int score)
         {
+            Console.Beep();
             Writer.Write(ConstantMsgs.GameOver, 2, Settings.TetrisCols / 3, ConsoleColor.White);
             Writer.Write(String.Format(ConstantMsgs.FinalScore, score), 3, Settings.TetrisCols / 3, ConsoleColor.Red);
             Writer.Write(ConstantMsgs.HighScoresTitle, 5, 3, ConsoleColor.White);

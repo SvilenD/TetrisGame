@@ -17,12 +17,12 @@
         static void Main()
         {
             new ConsoleSetup();
-            var highScore = new HighScore(GetUserName());
+            var score = new ScoreManager(GetUserName());
             
             while (true)
             {
                 FramesToMoveFigure = Calculator.FramesToMoveFigure(Level);
-                Level = Calculator.GetLevel(highScore.Score);
+                Level = Calculator.GetLevel(score.Score);
                 Frame++;
 
                 // Read user input -> move figure, pause game
@@ -82,7 +82,7 @@
                         if (CurrentFigureRow < Settings.ConsoleRows)
                         {
                             Frame = 1;
-                            highScore.Score++;
+                            score.Score++;
                             CurrentFigureRow++;
                         }
                         SuppressKeyPress = true;
@@ -98,7 +98,7 @@
 
                 //Redraw UI
                 Writer.DrawBorder();
-                Writer.DrawInfo(highScore.Score, Level);
+                Writer.DrawInfo(score.Score, Level);
                 Writer.DrawTetrisField(TetrisField);
                 Writer.DrawCurrentFigure(CurrentFigure, CurrentFigureRow, CurrentFigureCol);
 
@@ -106,14 +106,14 @@
                 {
                     AddCurrentFigureToTetrisField();
                     int lines = CheckForFullLines();
-                    highScore.Score += Settings.ScorePerLines[lines];
+                    score.Score += Settings.ScorePerLines[lines];
                     CurrentFigure = Settings.TetrisFigures[random.Next(0, Settings.TetrisFigures.Count)];
                     CurrentFigureRow = 0;
                     CurrentFigureCol = 0;
                     if (Collision(CurrentFigure))
                     {
-                        highScore.Record();
-                        GameModes.GameOver(highScore.Score);
+                        score.Record();
+                        GameModes.GameOver(score.Score);
                     }
                 }
 

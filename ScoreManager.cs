@@ -6,16 +6,16 @@
     using System.IO;
     using System.Text.RegularExpressions;
 
-    internal class HighScore
+    internal class ScoreManager
     {
         private const string MatchPattern = @"^(.+) -> (.+) - (?<score>\d+).$";
         private readonly string userName;
         private Dictionary<string, int> topScores;
         private int topScoresWriteRow = 7;
 
-        public int Score { get; set; }
+        internal int Score { get; set; }
 
-        public HighScore(string userName)
+        internal ScoreManager(string userName)
         {
             this.userName = userName;
             this.topScores = new Dictionary<string, int>();
